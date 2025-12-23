@@ -11,11 +11,14 @@ import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import React, { useState } from "react";
 import { toast } from "sonner";
+import { useRefreshStore } from "@/store/useRefreshStore";
 
 export function FormCadCategory() {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    const { bumpCategorias } = useRefreshStore();
 
     async function cadCategory(event: React.FormEvent<HTMLFormElement>) {
         try {
@@ -43,7 +46,9 @@ export function FormCadCategory() {
                 throw new Error(error);
             }
 
+            bumpCategorias();
             toast.success("Categoria cadastrada com sucesso!");
+            setOpen(false);
         } catch (error) {
             toast.error(`${error}`);
         } finally {

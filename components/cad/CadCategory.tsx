@@ -20,6 +20,7 @@ import { FormCadSubCategory } from "../form/FormCadSubCategory";
 import { LuPlus } from "react-icons/lu";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import { useRefreshStore } from "@/store/useRefreshStore";
 
 type Category = {
     categoryId: number;
@@ -33,6 +34,8 @@ type Category = {
 export function CadCategory() {
     const [categories, setCategories] = useState<Category[] | null>(null);
     const [open, setOpen] = useState(false);
+
+    const { categoriasVersion } = useRefreshStore();
 
     async function fetchCategories() {
         try {
@@ -57,7 +60,7 @@ export function CadCategory() {
     useEffect(() => {
         if (open)
             fetchCategories();
-    }, [open])
+    }, [open, categoriasVersion])
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <form>
