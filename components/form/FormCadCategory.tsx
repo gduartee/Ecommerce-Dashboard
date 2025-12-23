@@ -9,7 +9,7 @@ import {
 import { Button } from "../ui/button"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
-import { useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 
 export function FormCadCategory() {
@@ -17,25 +17,37 @@ export function FormCadCategory() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    async function cadCategory() {
+    async function cadCategory(event: React.FormEvent<HTMLFormElement>) {
         try {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            setLoading(true);
+
+            const name = String(formData.get("name")).trim();
+
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({
+                    name
+                })
             });
 
             const data = await response.json();
 
             if (!response.ok) {
-                setError(data.errors ? data.erros.name : "Erro ao cadastrar categoria. Reporte ao suporte imediatamente");
+                const messageError = data.errors ? data.errors.name : "Erro ao cadastrar categoria. Reporte ao suporte imediatamente"
+                setError(messageError);
                 throw new Error(error);
             }
 
             toast.success("Categoria cadastrada com sucesso!");
         } catch (error) {
             toast.error(`${error}`);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -47,7 +59,7 @@ export function FormCadCategory() {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px] overflow-y-auto">
                 <DialogTitle>Cadastrar categoria</DialogTitle>
-                <form>
+                <form onSubmit={cadCategory}>
                     <div className="flex flex-col w-full mt-4">
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Nome da categoria</Label>
