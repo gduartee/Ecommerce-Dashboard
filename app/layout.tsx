@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SidebarWrapper } from "@/components/bar/SidebarWrapper";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
       >
         <SidebarWrapper />
         {children}
+        <Toaster position="top-right" richColors closeButton className="z-9999" />
       </body>
     </html>
   );
