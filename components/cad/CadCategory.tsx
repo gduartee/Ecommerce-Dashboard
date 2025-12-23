@@ -21,6 +21,7 @@ import { LuPlus } from "react-icons/lu";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useRefreshStore } from "@/store/useRefreshStore";
+import { AlertDialogDelete } from "../alertDialogDelete/AlertDialogDelete";
 
 type Category = {
     categoryId: number;
@@ -88,10 +89,11 @@ export function CadCategory() {
                             >
                                 <AccordionItem value="item-1">
                                     <AccordionTrigger className="text-xl cursor-pointer flex w-full gap-2 flex-row items-center">
+
                                         {category.name}
-                                        <div className="bg-slate-900 rounded-md cursor-pointer  flex items-center justify-center hover:bg-slate-400 transition-colors w-8 h-8">
-                                            <FaTrashAlt className="text-white w-5 h-5" />
-                                        </div>
+
+                                        <AlertDialogDelete itemId={category.categoryId} itemName="categoria" />
+
                                     </AccordionTrigger>
                                     {category.subCategories && category.subCategories.length > 0 ? (
                                         category.subCategories.map(subCategory => (
@@ -99,16 +101,19 @@ export function CadCategory() {
                                                 <div className="flex justify-between bg-slate-50 p-2 rounded-sm">
                                                     <p className="text-base">{subCategory.name}</p>
                                                     <div className="flex items-center gap-2">
-                                                        <div className="bg-slate-900 rounded-md cursor-pointer  flex items-center justify-center hover:bg-slate-400 transition-colors w-8 h-8">
-                                                            <FaTrashAlt className="text-white w-5 h-5" />
-                                                        </div>
+
+                                                        <AlertDialogDelete itemId={subCategory.subCategoryId} itemName="subcategoria" />
+
                                                     </div>
                                                 </div>
-                                                <FormCadSubCategory />
+                                                <FormCadSubCategory parentId={category.categoryId} />
                                             </AccordionContent>
                                         ))
                                     ) : (
-                                        <p className="font-bold italic">Nenhuma subcategoria encontrada...</p>
+                                        <div>
+                                            <p className="font-bold italic">Nenhuma subcategoria encontrada...</p>
+                                            <FormCadSubCategory parentId={category.categoryId} />
+                                        </div>
                                     )}
                                 </AccordionItem>
                             </Accordion>
