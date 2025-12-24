@@ -22,8 +22,12 @@ import {
 import Image from "next/image";
 import { LogOut } from "lucide-react";
 import { CadCategory } from "../cad/CadCategory";
+import { useSectionStore } from "@/store/useSectionStore";
+import { CadProduto } from "../cad/CadProduto";
 
 export function Sidebar() {
+  const { setActiveSection } = useSectionStore();
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -64,7 +68,10 @@ export function Sidebar() {
                   </SheetClose>
 
                   <SheetClose asChild>
-                    <div className="flex items-center gap-2 py-2 pl-2 text-sm text-slate-400 hover:text-white hover:bg-slate-900/50 rounded-r-md transition-colors cursor-pointer">
+                    <div
+                      className="flex items-center gap-2 py-2 pl-2 text-sm text-slate-400 hover:text-white hover:bg-slate-900/50 rounded-r-md transition-colors cursor-pointer"
+                      onClick={() => setActiveSection("categorySection")}
+                    >
                       <LuList className="h-4 w-4" />
                       Ver Categorias
                     </div>
@@ -88,10 +95,7 @@ export function Sidebar() {
                 <div className="flex flex-col space-y-1 pl-9 mt-1 border-l border-slate-800 ml-4">
 
                   <SheetClose asChild>
-                    <div className="flex items-center gap-2 py-2 pl-2 text-sm text-slate-400 hover:text-white hover:bg-slate-900/50 rounded-r-md transition-colors cursor-pointer">
-                      <LuPlus className="h-4 w-4" />
-                      Cadastrar Produto
-                    </div>
+                    <CadProduto />
                   </SheetClose>
 
                   <SheetClose asChild>

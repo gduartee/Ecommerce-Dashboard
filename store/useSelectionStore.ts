@@ -1,31 +1,52 @@
 import { create } from "zustand";
 
+// 1. Definições de Tipo 
 type Scope = "category" | "product";
+type ID = string | number; // Aceita ambos sem precisar converter forçadamente
 
-type State = {
-    selected: Record<Scope, string | null>;
+interface State {
+  selected: Record<Scope, ID | null>;
+}
+
+interface Actions {
+  toggle: (scope: Scope, id: ID) => void; // Renomeado para 'toggle' para refletir a ação real
+  clear: (scope: Scope) => void;
+  clearAll: () => void;
+}
+
+// 2. Estado Inicial Constante (Facilita o reset)
+const INITIAL_SELECTION: Record<Scope, ID | null> = {
+  category: null,
+  product: null,
 };
 
-type Actions = {
-    select: (scope: Scope, id: number | string) => void; // toggle
-    clear: (scope: Scope) => void;
-    clearAll: () => void;
-};
+export const useSelectionStore = create<State & Actions>((set) => ({
+  // Estado inicial
+  selected: { ...INITIAL_SELECTION },
 
-export const useSelectionStore = create<State & Actions>((set, get) => ({
-    selected: {
-        category: null,
-        product: null,
-    },
-    select: (scope, id) => {
-        const curr = get().selected[scope];
-        const next = curr === String(id) ? null : String(id);
-        set((s) => ({ selected: { ...s.selected, [scope]: next } }));
-    },
-    clear: (scope) =>
-        set((s) => ({ selected: { ...s.selected, [scope]: null } })),
-    clearAll: () =>
-        set(() => ({
-            selected: { service: null, category: null, subCategory: null, employee: null, product: null, promotion: null },
-        })),
+  // Actions
+  toggle: (scope, id) =>
+    set((state) => {
+      const currentId = state.selected[scope];
+      // Se o ID clicado for igual ao atual, desmarca (null). Senão, marca o novo.
+      const nextId = currentId === id ? null : id;
+
+      return {
+        selected: {
+          ...state.selected,
+          [scope]: nextId,
+        },
+      };
+    }),
+
+  clear: (scope) =>
+    set((state) => ({
+      selected: {
+        ...state.selected,
+        [scope]: null,
+      },
+    })),
+
+  // 3. Reset limpo usando a constante
+  clearAll: () => set({ selected: { ...INITIAL_SELECTION } }),
 }));
