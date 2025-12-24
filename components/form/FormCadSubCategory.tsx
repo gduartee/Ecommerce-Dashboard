@@ -22,7 +22,7 @@ export function FormCadSubCategory({ parentId }: Props) {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState("");
 
-    const { bumpCategorias } = useRefreshStore();
+    const { bumpCategories } = useRefreshStore();
 
     async function cadSubCategory(event: React.FormEvent<HTMLFormElement>) {
         try {
@@ -56,7 +56,7 @@ export function FormCadSubCategory({ parentId }: Props) {
                 throw new Error(error);
             }
 
-            bumpCategorias();
+            bumpCategories();
             toast.success("Subcategoria cadastrada com sucesso!");
             setOpen(false);
         } catch (error) {

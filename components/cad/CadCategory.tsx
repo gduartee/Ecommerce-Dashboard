@@ -36,7 +36,7 @@ export function CadCategory() {
     const [categories, setCategories] = useState<Category[] | null>(null);
     const [open, setOpen] = useState(false);
 
-    const { categoriasVersion } = useRefreshStore();
+    const { categoriesVersion } = useRefreshStore();
 
     async function fetchCategories() {
         try {
@@ -61,7 +61,7 @@ export function CadCategory() {
     useEffect(() => {
         if (open)
             fetchCategories();
-    }, [open, categoriasVersion])
+    }, [open, categoriesVersion])
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <form>

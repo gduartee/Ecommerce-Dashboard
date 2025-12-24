@@ -16,10 +16,11 @@ import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, Command
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Switch } from "../ui/switch";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { LuPlus } from "react-icons/lu";
 import { toast } from "sonner";
+import { useRefreshStore } from "@/store/useRefreshStore";
 
 
 type Category = {
@@ -34,6 +35,7 @@ type Category = {
 export function CadProduto() {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [error, setError] = useState("");
 
     // Categoria
     const [categories, setCategories] = useState<Category[]>([]);
@@ -47,6 +49,8 @@ export function CadProduto() {
     const availableSubCategories = selectedCategory?.subCategories || [];
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<number | null>(null);
     const selectedSubCategory = availableSubCategories.find((sc) => sc.subCategoryId === selectedSubCategoryId);
+
+    const { bumpProducts } = useRefreshStore();
 
 
     async function fetchCategories() {
@@ -74,6 +78,64 @@ export function CadProduto() {
         }
     }
 
+    async function cadProduct(event: React.FormEvent<HTMLFormElement>) {
+        try {
+            event.preventDefault();
+            setLoading(true);
+            const formData = new FormData(event.currentTarget);
+
+            const name = String(formData.get("name")).trim();
+            const material = String(formData.get("material")).trim();
+            const description = String(formData.get("description")).trim();
+
+            if (!selectedSubCategoryId)
+                toast.error("Selecione a subcategoria!")
+
+            if (!name)
+                toast.error("Preencha o campo nome!");
+
+            if (!material)
+                toast.error("Preencha o campo material!");
+
+            if (!description)
+                toast.error("Preencha a descrição!");
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    categoryId: selectedSubCategoryId,
+                    name,
+                    material,
+                    description
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                if (data.errors.description) {
+                    setError(data.errors.description);
+                    throw new Error(error);
+                }
+                else {
+                    throw new Error("Erro ao cadastrar produto. Reporte ao suporte imediatamente!")
+                }
+
+            }
+
+            bumpProducts();
+            toast.success("Produto cadastrado com sucesso");
+
+        } catch (error) {
+            toast.error(`${error}`);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         if (open)
             fetchCategories();
@@ -96,7 +158,7 @@ export function CadProduto() {
                     </DialogDescription>
                 </DialogHeader>
 
-                <form className="grid gap-4">
+                <form onSubmit={cadProduct} className="grid gap-4">
                     <div className="grid gap-3">
                         <Label htmlFor="name-1">Nome</Label>
                         <Input id="name-1" name="name" placeholder="Ex: Anél Prata 925" />
@@ -230,27 +292,18 @@ export function CadProduto() {
                     </div>
                     {/* ========= /Subcategoria ========= */}
 
+
+                    <div className="grid gap-3">
+                        <Label htmlFor="material-1">Material</Label>
+                        <Input id="material-1" name="material" placeholder="Ex: Ouro" />
+                    </div>
+
+
                     <div className="grid gap-3">
                         <Label htmlFor="description-1">Descrição</Label>
                         <Input id="description-1" name="description" placeholder="Ex: Ideal para..." />
                     </div>
 
-                    <div className="grid gap-3">
-                        <Label htmlFor="price-1">Preço</Label>
-                        <Input
-                            type="number"
-                            id="price-1"
-                            name="price"
-                            step="0.01"
-                            min="1"
-                            inputMode="decimal"
-                            placeholder="Use . para separar casas decimais. Ex: 49.90" />
-                    </div>
-
-                    <div className="grid gap-3">
-                        <Label htmlFor="inStock-1">Qtd Estoque</Label>
-                        <Input type="number" id="inStock-1" name="inStock" placeholder="Ex: 100" />
-                    </div>
 
                     <div className="grid gap-3">
                         <Label htmlFor="featured">Colocar em destaque?</Label>

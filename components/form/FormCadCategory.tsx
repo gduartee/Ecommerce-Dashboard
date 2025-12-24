@@ -18,7 +18,7 @@ export function FormCadCategory() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const { bumpCategorias } = useRefreshStore();
+    const { bumpCategories } = useRefreshStore();
 
     async function cadCategory(event: React.FormEvent<HTMLFormElement>) {
         try {
@@ -46,7 +46,7 @@ export function FormCadCategory() {
                 throw new Error(error);
             }
 
-            bumpCategorias();
+            bumpCategories();
             toast.success("Categoria cadastrada com sucesso!");
             setOpen(false);
         } catch (error) {

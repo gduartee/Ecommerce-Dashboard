@@ -1,17 +1,21 @@
 import { create } from 'zustand';
 
 interface RefreshStore {
-    categoriasVersion: number;
+    categoriesVersion: number;
+    productsVersion: number;
 
 
-
-    bumpCategorias: () => void;
+    bumpCategories: () => void;
+    bumpProducts: () => void;
 };
 
 export const useRefreshStore = create<RefreshStore>((set) => ({
-    categoriasVersion: 0,
+    categoriesVersion: 0,
+    productsVersion: 0,
 
 
 
-    bumpCategorias: () => set((s) => ({ categoriasVersion: s.categoriasVersion + 1 })),
+
+    bumpCategories: () => set((s) => ({ categoriesVersion: s.categoriesVersion + 1 })),
+    bumpProducts: () => set((s) => ({ productsVersion: s.productsVersion + 1 })),
 }));
