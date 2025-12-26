@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { useRefreshStore } from "@/store/useRefreshStore";
 import { useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrash, FaTrashAlt } from "react-icons/fa";
 import { toast } from "sonner";
 
 type AlertDialogDeleteProps = {
@@ -25,17 +25,18 @@ type AlertDialogDeleteProps = {
 export function AlertDialogDelete({ itemName, itemId }: AlertDialogDeleteProps) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { bumpCategorias } = useRefreshStore();
+
+    const { bumpCategories } = useRefreshStore();
 
     var rota = "";
     var flexaoDeGenero = "";
 
     switch (itemName) {
-        case "categoria":
+        case "category":
             rota = "categories";
             flexaoDeGenero = "deletada";
             break;
-        case "subcategoria":
+        case "subcategory":
             rota = "categories";
             flexaoDeGenero = "deletada";
             break;
@@ -54,17 +55,23 @@ export function AlertDialogDelete({ itemName, itemId }: AlertDialogDeleteProps) 
                 }
             );
 
-            if (!response.ok)
-                throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+
+            if (!response.ok) {
+                const error = data.message || "Erro ao deletar categoria. Verifique se não há produtos vinculados à ela."
+                
+                throw new Error(error);
+            }
+
 
             if (itemName === "categoria" || itemName === "subcategoria")
-                bumpCategorias();
+                bumpCategories();
 
 
             toast.success(`${itemName} ${flexaoDeGenero} com sucesso`);
             setOpen(false);
-        } catch (err) {
-            toast.error(`Erro ao deletar ${itemName}. Reporte ao suporte imediatamente!`);
+        } catch (error) {
+            toast.error(`${error}`);
         } finally {
             setLoading(false);
         }
@@ -73,9 +80,11 @@ export function AlertDialogDelete({ itemName, itemId }: AlertDialogDeleteProps) 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
-                <div className="bg-slate-900 rounded-md cursor-pointer  flex items-center justify-center hover:bg-slate-400 transition-colors w-7 h-7">
-                    <FaTrashAlt className="text-white w-5 h-5" />
-                </div>
+                <Button
+                    className="cursor-pointer w-8 h-8"
+                >
+                    <FaTrash />
+                </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

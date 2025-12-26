@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { useSelectionStore } from "@/store/useSelectionStore";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Input } from "../ui/input";
+import { AlertDialogDelete } from "../alertDialogDelete/AlertDialogDelete";
+import { EditCategory } from "../edit/EditCategory";
 
 type Category = {
     categoryId: number;
@@ -99,18 +101,27 @@ export function CategoryTable() {
                                     <td className="px-2 py-1">ver subcategorias</td>
                                     <td className="px-2 py-1 ml-auto">
                                         <div className="flex gap-2">
-                                            <Button
-                                                className="cursor-pointer w-8 h-8"
-                                                disabled={selected.category !== category.categoryId}
-                                            >
-                                                <FaEdit />
-                                            </Button>
-                                            <Button
-                                                className="cursor-pointer w-8 h-8"
-                                                disabled={selected.category !== category.categoryId}
-                                            >
-                                                <FaTrash />
-                                            </Button>
+                                            {selected.category !== category.categoryId ? (
+                                                <Button
+                                                    className="cursor-pointer w-8 h-8"
+                                                    disabled={true}
+                                                >
+                                                    <FaEdit />
+                                                </Button>
+                                            ) : (
+                                                <EditCategory categoryId={category.categoryId} />
+                                            )}
+
+                                            {selected.category !== category.categoryId ? (
+                                                <Button
+                                                    className="cursor-pointer w-8 h-8"
+                                                    disabled={true}
+                                                >
+                                                    <FaTrash />
+                                                </Button>
+                                            ) : (
+                                                <AlertDialogDelete itemId={category.categoryId} itemName="category" />
+                                            )}
                                         </div>
                                     </td>
                                 </tr>
