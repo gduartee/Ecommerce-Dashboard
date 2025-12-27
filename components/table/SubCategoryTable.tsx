@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
@@ -9,8 +10,18 @@ type Props = {
 }
 
 export function SubCategoryTable({ categoryId }: Props) {
+    const [open, setOpen] = useState(false);
+
+    async function fetchSubcategories(){
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline">
                     Ver Subcategorias
@@ -31,7 +42,7 @@ export function SubCategoryTable({ categoryId }: Props) {
                             <Checkbox />
                         </td>
                         <td className="px-2 py-1">
-                            Nome da categoria
+                            Nome da subcategoria
                         </td>
                         <td className="px-2 py-1">
 
