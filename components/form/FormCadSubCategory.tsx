@@ -14,10 +14,10 @@ import { toast } from "sonner";
 import { useRefreshStore } from "@/store/useRefreshStore";
 
 type Props = {
-    parentId: number
+    categoryId: number
 }
 
-export function FormCadSubCategory({ parentId }: Props) {
+export function FormCadSubCategory({ categoryId }: Props) {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [error, setError] = useState("");
@@ -37,18 +37,20 @@ export function FormCadSubCategory({ parentId }: Props) {
                 return;
             }
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subcategories`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     name,
-                    parentId
+                    categoryId
                 })
             });
 
-            const data = await response.json();
+            const text = await response.text();
+
+            const data = text ? JSON.parse(text) : {};
 
             if (!response.ok) {
                 const messageError = data.errors ? data.errors.name : "Erro ao cadastrar subcategoria. Reporte ao suporte imediatamente"
@@ -79,7 +81,6 @@ export function FormCadSubCategory({ parentId }: Props) {
                         <div className="flex flex-col gap-2">
                             <Label htmlFor="name">Nome da subcategoria</Label>
                             <Input id="name" name="name" placeholder="Ex: Anéis" />
-                            {/*errors.name && <p className="text-red-600">{errors.name}</p>*/}
                         </div>
                         <Button
                             type="submit"

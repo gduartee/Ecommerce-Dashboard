@@ -22,13 +22,15 @@ import { useEffect, useState } from "react";
 import { useRefreshStore } from "@/store/useRefreshStore";
 import { AlertDialogDelete } from "../alertDialogDelete/AlertDialogDelete";
 
+type Subcategory = {
+    subCategoryId: number;
+    name: string;
+}
+
 type Category = {
     categoryId: number;
     name: string;
-    subCategories: {
-        subCategoryId: number;
-        name: string;
-    }[]
+    subCategories: Subcategory[];
 }
 
 export function CadCategory() {
@@ -91,27 +93,27 @@ export function CadCategory() {
 
                                         {category.name}
 
-                                        <AlertDialogDelete itemId={category.categoryId} itemName="categoria" />
+                                        <AlertDialogDelete itemId={category.categoryId} itemName="category" />
 
                                     </AccordionTrigger>
-                                    {category.subCategories && category.subCategories.length > 0 ? (
+                                    {category.subCategories.length > 0 ? (
                                         category.subCategories.map(subCategory => (
                                             <AccordionContent className="flex flex-col gap-4 text-balance" key={subCategory.subCategoryId}>
                                                 <div className="flex justify-between bg-slate-50 p-2 rounded-sm">
                                                     <p className="text-base">{subCategory.name}</p>
                                                     <div className="flex items-center gap-2">
 
-                                                        <AlertDialogDelete itemId={subCategory.subCategoryId} itemName="subcategoria" />
+                                                        <AlertDialogDelete itemId={subCategory.subCategoryId} itemName="subcategory" />
 
                                                     </div>
                                                 </div>
-                                                <FormCadSubCategory parentId={category.categoryId} />
+                                                <FormCadSubCategory categoryId={category.categoryId} />
                                             </AccordionContent>
                                         ))
                                     ) : (
                                         <div>
                                             <p className="font-bold italic">Nenhuma subcategoria encontrada...</p>
-                                            <FormCadSubCategory parentId={category.categoryId} />
+                                            <FormCadSubCategory categoryId={category.categoryId} />
                                         </div>
                                     )}
                                 </AccordionItem>

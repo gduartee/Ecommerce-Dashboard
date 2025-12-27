@@ -39,7 +39,7 @@ export function AlertDialogDelete({ itemName, itemId }: AlertDialogDeleteProps) 
             namePt = "categoria";
             break;
         case "subcategory":
-            rota = "categories";
+            rota = "subcategories";
             flexaoDeGenero = "deletada";
             namePt = "subcategoria";
             break;
@@ -65,13 +65,13 @@ export function AlertDialogDelete({ itemName, itemId }: AlertDialogDeleteProps) 
             const data = text ? JSON.parse(text) : {};
 
             if (!response.ok) {
-                const error = data.message || "Erro ao deletar categoria. Verifique se não há produtos vinculados à ela."
+                const error = data.message || "Erro ao deletar. Reporte ao suporte imediatamente!";
 
                 throw new Error(error);
             }
 
 
-            if (itemName === "category")
+            if (itemName === "category" || itemName === "subcategory")
                 bumpCategories();
 
 
