@@ -30,45 +30,52 @@ export function AlertDialogDelete({ itemName, itemId }: AlertDialogDeleteProps) 
 
     var rota = "";
     var flexaoDeGenero = "";
+    var namePt = "";
 
     switch (itemName) {
         case "category":
             rota = "categories";
             flexaoDeGenero = "deletada";
+            namePt = "categoria";
             break;
         case "subcategory":
             rota = "categories";
             flexaoDeGenero = "deletada";
+            namePt = "subcategoria";
             break;
         default:
             break;
     }
 
     async function deleteItem() {
-        if (!itemId) return;
-        setLoading(true);
         try {
+            if (!itemId) return;
+
+            setLoading(true);
+
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/${rota}/${itemId}`,
                 {
-                    method: "DELETE",
+                    method: "DELETE"
                 }
             );
 
-            const data = await response.json();
+            const text = await response.text();
+
+            const data = text ? JSON.parse(text) : {};
 
             if (!response.ok) {
                 const error = data.message || "Erro ao deletar categoria. Verifique se não há produtos vinculados à ela."
-                
+
                 throw new Error(error);
             }
 
 
-            if (itemName === "categoria" || itemName === "subcategoria")
+            if (itemName === "category")
                 bumpCategories();
 
 
-            toast.success(`${itemName} ${flexaoDeGenero} com sucesso`);
+            toast.success(`${namePt} ${flexaoDeGenero} com sucesso`);
             setOpen(false);
         } catch (error) {
             toast.error(`${error}`);
@@ -80,11 +87,9 @@ export function AlertDialogDelete({ itemName, itemId }: AlertDialogDeleteProps) 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
-                <Button
-                    className="cursor-pointer w-8 h-8"
-                >
-                    <FaTrash />
-                </Button>
+                <div className="bg-primary text-white rounded-md p-2 cursor-pointer">
+                    <FaTrash className="w-4 h-4" />
+                </div>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

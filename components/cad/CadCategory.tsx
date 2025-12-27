@@ -14,7 +14,6 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 
-import { FaTrashAlt } from "react-icons/fa";
 import { FormCadCategory } from "../form/FormCadCategory";
 import { FormCadSubCategory } from "../form/FormCadSubCategory";
 import { LuPlus } from "react-icons/lu";
@@ -51,7 +50,7 @@ export function CadCategory() {
                 throw new Error("Erro ao buscar categorias. Reporte ao suporte imediatamente!");
 
             const data = await response.json();
-            console.log(data);
+
             setCategories(data.data);
         } catch (error) {
             toast.error(`${error}`)
