@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 // 1. Definições de Tipo 
-type Scope = "category" | "product";
+type Scope = "category" | "subcategory" | "product";
 type ID = string | number; // Aceita ambos sem precisar converter forçadamente
 
 interface State {
@@ -17,6 +17,7 @@ interface Actions {
 // 2. Estado Inicial Constante (Facilita o reset)
 const INITIAL_SELECTION: Record<Scope, ID | null> = {
   category: null,
+  subcategory: null,
   product: null,
 };
 

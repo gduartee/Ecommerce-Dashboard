@@ -15,24 +15,25 @@ import { useRefreshStore } from "@/store/useRefreshStore";
 import { FaEdit } from "react-icons/fa";
 
 type Props = {
-    categoryId: number;
+    subcategoryId: number;
 }
 
-type Category = {
-    categoryId: number;
+type Subcategory = {
+    subCategoryId: number;
     name: string;
 };
 
-export function EditCategory({ categoryId }: Props) {
+export function EditSubcategory({ subcategoryId }: Props) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [category, setCategory] = useState<Category | null>(null);
+    const [error, setError] = useState("");
+    const [subcategory, setSubcategory] = useState<Subcategory | null>(null);
 
-    const { bumpCategories } = useRefreshStore();
+    const { bumpSubcategories } = useRefreshStore();
 
-    async function fetchCategory() {
+    async function fetchSubcategory() {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subcategories/${subcategoryId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -42,17 +43,17 @@ export function EditCategory({ categoryId }: Props) {
             const data = await response.json();
 
             if (!response.ok) {
-                const msgErro = data.message || "Erro ao buscar categoria. Reporte ao suporte imediatamente!";
+                const msgErro = data.message || "Erro ao buscar subcategoria. Reporte ao suporte imediatamente!";
                 throw new Error(msgErro);
             }
 
-            setCategory(data);
+            setSubcategory(data);
         } catch (error) {
             toast.error(`${error}`)
         }
     }
 
-    async function editCategory(event: React.FormEvent<HTMLFormElement>) {
+    async function editSubcategory(event: React.FormEvent<HTMLFormElement>) {
         try {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
@@ -60,7 +61,7 @@ export function EditCategory({ categoryId }: Props) {
 
             const name = String(formData.get("name")).trim();
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/${categoryId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subcategories/${subcategoryId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -72,13 +73,14 @@ export function EditCategory({ categoryId }: Props) {
 
             if (!response.ok) {
                 const data = await response.json();
-                const msgErro = data.errors ? data.errors.name : "Erro ao editar categoria. Reporte ao suporte imediatamente"
+                const msgErro = data.errors ? data.errors.name : "Erro ao editar subcategoria. Reporte ao suporte imediatamente"
 
                 throw new Error(msgErro);
             }
 
-            bumpCategories();
-            toast.success("Categoria editada com sucesso!");
+            bumpSubcategories();
+
+            toast.success("Subcategoria editada com sucesso!");
             setOpen(false);
         } catch (error) {
             toast.error(`${error}`);
@@ -89,7 +91,7 @@ export function EditCategory({ categoryId }: Props) {
 
     useEffect(() => {
         if (open)
-            fetchCategory();
+            fetchSubcategory();
     }, [open])
 
     return (
@@ -103,12 +105,12 @@ export function EditCategory({ categoryId }: Props) {
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px] overflow-y-auto">
-                <DialogTitle>Editar categoria</DialogTitle>
-                <form onSubmit={editCategory}>
+                <DialogTitle>Editar subcategoria</DialogTitle>
+                <form onSubmit={editSubcategory}>
                     <div className="flex flex-col w-full mt-4">
                         <div className="flex flex-col gap-2">
-                            <Label htmlFor="name">Nome da categoria</Label>
-                            <Input id="name" name="name" placeholder="Ex: Masculino" defaultValue={category?.name} />
+                            <Label htmlFor="name">Nome da subcategoria</Label>
+                            <Input id="name" name="name" placeholder="Ex: Masculino" defaultValue={subcategory?.name} />
                         </div>
                         <Button
                             type="submit"

@@ -10,6 +10,8 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { Input } from "../ui/input";
 import { AlertDialogDelete } from "../alertDialogDelete/AlertDialogDelete";
 import { EditCategory } from "../edit/EditCategory";
+import { SubcategoryTable } from "./SubcategoryTable";
+
 
 type Category = {
     categoryId: number;
@@ -98,7 +100,12 @@ export function CategoryTable() {
                                         />
                                     </td>
                                     <td className="px-2 py-1">{category.name}</td>
-                                    <td className="px-2 py-1">ver subcategorias</td>
+                                    <td className="px-2 py-1">
+                                        <SubcategoryTable
+                                            categoryId={category.categoryId}
+                                            categoryName={category.name}
+                                        />
+                                    </td>
                                     <td className="px-2 py-1 ml-auto">
                                         <div className="flex gap-2">
                                             {selected.category !== category.categoryId ? (
