@@ -9,14 +9,20 @@ type Props = {
     categoryId: number;
 }
 
+type Subcategory = {
+    subcategoryId: number;
+    name: string;
+}
+
 export function SubCategoryTable({ categoryId }: Props) {
     const [open, setOpen] = useState(false);
+    const [subcategories, setSubcategories] = useState<Subcategory[] | null>(null);
 
-    async function fetchSubcategories(){
+    async function fetchSubcategories() {
         try {
             
         } catch (error) {
-            
+
         }
     }
 
