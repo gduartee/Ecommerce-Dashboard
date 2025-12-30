@@ -6,7 +6,11 @@ import { BsBox2 } from "react-icons/bs";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 
-export function Cards() {
+interface DashboardData {
+    totalClientes: number;
+}
+
+export function Cards({ totalClientes }: DashboardData) {
     return (
         <section className="flex flex-col">
             {/* APENAS DESKTOP */}
@@ -45,7 +49,7 @@ export function Cards() {
                     </CardHeader>
 
                     <CardContent className="select-none">
-                        <p className="text-base sm:text-lg font-bold ">X</p>
+                        <p className="text-base sm:text-lg font-bold ">{totalClientes}</p>
                     </CardContent>
                 </Card>
 

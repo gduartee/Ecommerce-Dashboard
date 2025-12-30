@@ -53,8 +53,8 @@ export function Sidebar() {
           <Accordion type="single" collapsible className="w-full border-none">
 
             <AccordionItem value="produtos" className="border-b-slate-800">
-              <AccordionTrigger className="py-2 px-2 rounded-md hover:bg-slate-900 hover:no-underline data-[state=open]:bg-slate-900 text-slate-200">
-                <div className="flex items-center gap-2 cursor-pointer">
+              <AccordionTrigger className="py-2 px-2 rounded-md hover:bg-slate-900 hover:no-underline data-[state=open]:bg-slate-900 text-slate-200 cursor-pointer">
+                <div className="flex items-center gap-2">
                   <MdOutlineCategory className="h-5 w-5 text-slate-400" />
                   <span className="font-medium">Categorias</span>
                 </div>
@@ -84,8 +84,8 @@ export function Sidebar() {
           <Accordion type="single" collapsible className="w-full border-none">
 
             <AccordionItem value="produtos" className="border-b-slate-800">
-              <AccordionTrigger className="py-2 px-2 rounded-md hover:bg-slate-900 hover:no-underline data-[state=open]:bg-slate-900 text-slate-200">
-                <div className="flex items-center gap-2 cursor-pointer">
+              <AccordionTrigger className="py-2 px-2 rounded-md hover:bg-slate-900 hover:no-underline data-[state=open]:bg-slate-900 text-slate-200 cursor-pointer">
+                <div className="flex items-center gap-2">
                   <LuPackage className="h-5 w-5 text-slate-400" />
                   <span className="font-medium">Produtos</span>
                 </div>
