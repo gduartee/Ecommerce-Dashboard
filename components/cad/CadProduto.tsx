@@ -36,6 +36,7 @@ export function CadProduto() {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [error, setError] = useState("");
+    const [featured, setFeatured] = useState(false);
 
     // Categoria
     const [categories, setCategories] = useState<Category[]>([]);
@@ -106,10 +107,11 @@ export function CadProduto() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    categoryId: selectedSubCategoryId,
+                    subcategoryId: selectedSubCategoryId,
                     name,
+                    description,
                     material,
-                    description
+                    featured
                 })
             });
 
@@ -128,6 +130,7 @@ export function CadProduto() {
 
             bumpProducts();
             toast.success("Produto cadastrado com sucesso");
+            setOpen(false);
 
         } catch (error) {
             toast.error(`${error}`);
@@ -309,6 +312,8 @@ export function CadProduto() {
                         <Label htmlFor="featured">Colocar em destaque?</Label>
                         <Switch
                             className="cursor-pointer"
+                            checked={featured}
+                            onCheckedChange={setFeatured}
                         />
                     </div>
 
