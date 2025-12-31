@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import imageIcon from "../../public/assets/images/sem-imagens.png";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { ViewProductDetails } from "../view/ViewProductDetails";
 
 interface ProductVariant {
     productVariantId: number;
@@ -101,9 +102,9 @@ export function ProductTable() {
                             </div>
 
                             <div className="flex gap-2 mt-auto">
-                                <Button className="cursor-pointer flex-1">
-                                    Ver detalhes
-                                </Button>
+                                <ViewProductDetails
+
+                                />
 
                                 <Button
                                     className="cursor-pointer flex-1" variant="destructive"
