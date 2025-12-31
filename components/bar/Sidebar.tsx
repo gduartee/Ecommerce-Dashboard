@@ -99,7 +99,10 @@ export function Sidebar() {
                   </SheetClose>
 
                   <SheetClose asChild>
-                    <div className="flex items-center gap-2 py-2 pl-2 text-sm text-slate-400 hover:text-white hover:bg-slate-900/50 rounded-r-md transition-colors cursor-pointer">
+                    <div
+                      className="flex items-center gap-2 py-2 pl-2 text-sm text-slate-400 hover:text-white hover:bg-slate-900/50 rounded-r-md transition-colors cursor-pointer"
+                      onClick={() => setActiveSection("productSection")}
+                    >
                       <LuList className="h-4 w-4" />
                       Ver Produtos
                     </div>
