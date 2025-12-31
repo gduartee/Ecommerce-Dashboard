@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
+import imageIcon from "../../public/assets/images/sem-imagens.png";
+import Image from "next/image";
+import { Button } from "../ui/button";
 
 interface ProductVariant {
     productVariantId: number;
@@ -30,11 +33,14 @@ interface Product {
 }
 
 export function ProductTable() {
+    const [loading, setLoading] = useState(false);
     const [nameBuscar, setNameBuscar] = useState("");
     const [products, setProducts] = useState<Product[] | null>(null);
 
     async function fetchProducts() {
         try {
+            setLoading(true);
+
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
                 method: 'GET',
                 headers: {
@@ -50,6 +56,8 @@ export function ProductTable() {
             setProducts(data.data);
         } catch (error) {
             toast.error(`${error}`)
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -72,10 +80,42 @@ export function ProductTable() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 shadow-2xl gap-2">
-                <div>
+            <div className="grid grid-cols-1 lg:grid-cols-4 shadow-2xl gap-2 p-4 rounded-sm">
+                {products && products.length > 0 ? (
+                    products.map(product => (
+                        <div
+                            className="flex flex-col gap-4 shadow-2xl p-2 rounded-md"
+                            key={product.productId}
+                        >
+                            <span className="font-bold text-lg">{product.name}</span>
 
-                </div>
+                            <div className="relative w-full h-80 shadow-2xl rounded-lg overflow-hidden">
+                                <Image
+                                    src={product?.images[0]?.url || imageIcon}
+                                    alt="Imagem do produto"
+                                    className="object-cover"
+                                    fill
+                                    quality={95}
+                                    draggable={false}
+                                />
+                            </div>
+
+                            <div className="flex gap-2 mt-auto">
+                                <Button className="cursor-pointer flex-1">
+                                    Ver detalhes
+                                </Button>
+
+                                <Button
+                                    className="cursor-pointer flex-1" variant="destructive"
+                                >
+                                    Excluir
+                                </Button>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p className="font-bold italic">{loading ? "Carregando produtos..." : "Nenhum produto encontrado..."}</p>
+                )}
             </div>
 
         </div>

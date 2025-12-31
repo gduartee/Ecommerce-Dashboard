@@ -27,7 +27,7 @@ async function getTotalClientes() {
 export default async function Home() {
   const totalClientes = await getTotalClientes();
   return (
-    <main className="p-10">
+    <main className="p-4 lg:p-10">
       <Cards totalClientes={totalClientes} />
       <PageContent />
     </main>
