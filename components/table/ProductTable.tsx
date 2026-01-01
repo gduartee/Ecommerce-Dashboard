@@ -7,6 +7,7 @@ import imageIcon from "../../public/assets/images/sem-imagens.png";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { ViewProductDetails } from "../view/ViewProductDetails";
+import { ViewProductVariants } from "../view/ViewProductVariants";
 
 interface ProductVariant {
     productVariantId: number;
@@ -102,8 +103,8 @@ export function ProductTable() {
                             </div>
 
                             <div className="flex gap-2 mt-auto">
-                                <ViewProductDetails
-
+                                <ViewProductVariants
+                                    variants={product.productVariants}
                                 />
 
                                 <Button
