@@ -7,7 +7,9 @@ export function ViewProductDetails() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="cursor-pointer flex-1">
+                <Button
+                    className="cursor-pointer bg-slate-500 flex-1"
+                >
                     Ver detalhes
                 </Button>
             </DialogTrigger>

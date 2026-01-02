@@ -25,7 +25,7 @@ type Category = {
 export function CategoryTable() {
     const [nameBuscar, setNameBuscar] = useState("");
     const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [categories, setCategories] = useState<Category[] | null>(null);
 
@@ -37,7 +37,7 @@ export function CategoryTable() {
     async function fetchCategories() {
         try {
             setLoading(true);
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories?name=${nameBuscar}&page=${page}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories?name=${nameBuscar}&page=${page - 1}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

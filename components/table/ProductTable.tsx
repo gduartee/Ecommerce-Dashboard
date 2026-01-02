@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { ViewProductDetails } from "../view/ViewProductDetails";
 import { ViewProductVariants } from "../view/ViewProductVariants";
+import { FaTrash } from "react-icons/fa";
 
 interface ProductVariant {
     productVariantId: number;
@@ -37,13 +38,15 @@ interface Product {
 export function ProductTable() {
     const [loading, setLoading] = useState(false);
     const [nameBuscar, setNameBuscar] = useState("");
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     const [products, setProducts] = useState<Product[] | null>(null);
 
     async function fetchProducts() {
         try {
             setLoading(true);
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?name=${nameBuscar}&page=${page - 1}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -65,7 +68,7 @@ export function ProductTable() {
 
     useEffect(() => {
         fetchProducts();
-    }, []);
+    }, [nameBuscar]);
 
     return (
         <div className="flex flex-col gap-4">
@@ -108,9 +111,15 @@ export function ProductTable() {
                                 />
 
                                 <Button
-                                    className="cursor-pointer flex-1" variant="destructive"
+                                    className="cursor-pointer bg-slate-500 flex-1"
                                 >
-                                    Excluir
+                                    Ver detalhes
+                                </Button>
+
+                                <Button
+                                    className="cursor-pointer" variant="destructive"
+                                >
+                                    <FaTrash />
                                 </Button>
                             </div>
                         </div>
@@ -118,6 +127,25 @@ export function ProductTable() {
                 ) : (
                     <p className="font-bold italic">{loading ? "Carregando produtos..." : "Nenhum produto encontrado..."}</p>
                 )}
+            </div>
+            <div className="flex justify-between items-center">
+                <Button
+                    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={page === 1}
+                    variant="outline"
+                    className="cursor-pointer"
+                >
+                    Anterior
+                </Button>
+                <span>Página {page} de {totalPages}</span>
+                <Button
+                    onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={page === totalPages}
+                    variant="outline"
+                    className="cursor-pointer"
+                >
+                    Próximo
+                </Button>
             </div>
 
         </div>
