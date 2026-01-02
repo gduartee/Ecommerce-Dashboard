@@ -57,8 +57,9 @@ export function ProductTable() {
                 throw new Error("Erro ao buscar produtos. Reporte ao suporte imediatamente!");
 
             const data = await response.json();
-
             setProducts(data.data);
+            setTotalPages(data.totalPages);
+
         } catch (error) {
             toast.error(`${error}`)
         } finally {
@@ -110,11 +111,13 @@ export function ProductTable() {
                                     variants={product.productVariants}
                                 />
 
-                                <Button
-                                    className="cursor-pointer bg-slate-500 flex-1"
-                                >
-                                    Ver detalhes
-                                </Button>
+                                <ViewProductDetails
+                                    productId={product.productId}
+                                    name={product.name}
+                                    description={product.description}
+                                    material={product.material}
+                                    featured={product.featured}
+                                />
 
                                 <Button
                                     className="cursor-pointer" variant="destructive"

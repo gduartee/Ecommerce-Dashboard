@@ -3,7 +3,15 @@
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 
-export function ViewProductDetails() {
+interface ProductDataProps {
+    productId: number;
+    name: string;
+    description: string;
+    material: string;
+    featured: boolean;
+}
+
+export function ViewProductDetails({ productId, name, description, material, featured }: ProductDataProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -24,27 +32,27 @@ export function ViewProductDetails() {
 
                     <div className="flex gap-2 items-center">
                         <span className="font-bold italic">Nome:</span>
-                        Nome do produto...
+                        {name}
                     </div>
 
                     <div className="flex gap-2 items-center">
                         <span className="font-bold italic">Descrição:</span>
-                        descrição do produto
+                        {description}
                     </div>
 
                     <div className="flex gap-2 items-center">
                         <span className="font-bold italic">Material:</span>
-                        Material
+                        {material}
                     </div>
 
                     <div className="flex gap-2 items-center">
                         <span className="font-bold italic">Em destaque:</span>
-                        Destaque
+                        {featured ? "Sim" : "Não"}
                     </div>
                 </div>
 
                 <DialogFooter>
-                    <Button>
+                    <Button className="cursor-pointer">
                         Editar imagens
                     </Button>
                 </DialogFooter>
