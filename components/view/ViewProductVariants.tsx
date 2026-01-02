@@ -2,7 +2,7 @@
 
 import { formatBRL } from "@/utils/formatBRL";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 
 interface ProductVariant {
     productVariantId: number;
@@ -71,6 +71,11 @@ export function ViewProductVariants({ variants }: ViewProductVariantsProps) {
                         </p>
                     )}
                 </div>
+                <DialogFooter>
+                    <Button className="cursor-pointer" variant="outline">
+                        Criar variação
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     )

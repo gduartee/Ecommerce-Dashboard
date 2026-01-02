@@ -23,7 +23,7 @@ import Image from "next/image";
 import { LogOut } from "lucide-react";
 import { CadCategory } from "../cad/CadCategory";
 import { useSectionStore } from "@/store/useSectionStore";
-import { CadProduto } from "../cad/CadProduto";
+import { CadProduto } from "../cad/CadProduct";
 
 export function Sidebar() {
   const { setActiveSection } = useSectionStore();
