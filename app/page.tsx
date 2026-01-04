@@ -1,6 +1,5 @@
 import { Cards } from "@/components/cards/Cards";
 import { PageContent } from "@/components/pageContent/PageContent";
-import { toast } from "sonner";
 
 async function getTotalClientes() {
   try {
@@ -20,7 +19,7 @@ async function getTotalClientes() {
     return data.totalElements;
 
   } catch (error) {
-    toast.error(`${error}`);
+    console.error(`${error}`);
   }
 }
 
