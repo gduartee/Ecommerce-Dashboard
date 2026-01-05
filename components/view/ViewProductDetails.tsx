@@ -1,5 +1,6 @@
 "use client";
 
+import { EditProductImages } from "../edit/EditProductImages";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 
@@ -52,9 +53,7 @@ export function ViewProductDetails({ productId, name, description, material, fea
                 </div>
 
                 <DialogFooter>
-                    <Button className="cursor-pointer">
-                        Editar imagens
-                    </Button>
+                    <EditProductImages productId={productId}/>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
