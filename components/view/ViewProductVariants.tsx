@@ -3,6 +3,7 @@
 import { formatBRL } from "@/utils/formatBRL";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { CadProductVariant } from "../cad/CadProductVariant";
 
 interface ProductVariant {
     productVariantId: number;
@@ -15,9 +16,10 @@ interface ProductVariant {
 
 interface ViewProductVariantsProps {
     variants: ProductVariant[];
+    productId: number;
 }
 
-export function ViewProductVariants({ variants }: ViewProductVariantsProps) {
+export function ViewProductVariants({ variants, productId }: ViewProductVariantsProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -72,9 +74,7 @@ export function ViewProductVariants({ variants }: ViewProductVariantsProps) {
                     )}
                 </div>
                 <DialogFooter>
-                    <Button className="cursor-pointer" variant="outline">
-                        Criar variação
-                    </Button>
+                    <CadProductVariant productId={productId} />
                 </DialogFooter>
             </DialogContent>
         </Dialog>

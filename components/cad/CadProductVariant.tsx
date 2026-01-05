@@ -13,50 +13,74 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Switch } from "../ui/switch";
 import { LuPlus } from "react-icons/lu";
 import { useState } from "react";
 import { toast } from "sonner";
 import { getCookieClient } from "@/utils/cookie";
 
-export function CadProductVariant() {
+interface Props {
+    productId: number;
+}
+
+export function CadProductVariant({ productId }: Props) {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
-    const [error, setError] = useState("");
-    const [featured, setFeatured] = useState(false);
+    const [error, setError] = useState("");;
 
     const token = getCookieClient("auth-token-emp");
 
     async function cadProductVariant(event: React.FormEvent<HTMLFormElement>) {
         try {
             event.preventDefault();
-            setLoading(true);
+
             const formData = new FormData(event.currentTarget);
 
-            const name = String(formData.get("name")).trim();
-            const material = String(formData.get("material")).trim();
-            const description = String(formData.get("description")).trim();
+            const size = String(formData.get("size")).trim();
+            const sku = String(formData.get("sku")).trim();
+            const price = Number(formData.get("price"));
+            const stockQuantity = Number(formData.get("stockQuantity"));
+            const weightGrams = Number(formData.get("weightGrams"));
 
-            if (!name)
-                toast.error("Preencha o campo nome!");
+            if (!size) {
+                toast.error("Preencha o campo tamanho!");
+                return;
+            }
 
-            if (!material)
-                toast.error("Preencha o campo material!");
+            if (!sku) {
+                toast.error("Preencha o campo SKU!");
+                return;
+            }
 
-            if (!description)
-                toast.error("Preencha a descrição!");
+            if (price < 0) {
+                toast.error("Preencha o preço!");
+                return;
+            }
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+            if (stockQuantity <= 0) {
+                toast.error("Estoque inválido!");
+                return;
+            }
+
+            if (weightGrams <= 0) {
+                toast.error("Peso inválido!");
+                return;
+            }
+
+            setLoading(true);
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/variants`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    name,
-                    description,
-                    material,
-                    featured
+                    productId,
+                    size,
+                    sku,
+                    price,
+                    stockQuantity,
+                    weightGrams
                 })
             });
 
@@ -68,12 +92,12 @@ export function CadProductVariant() {
                     throw new Error(error);
                 }
                 else {
-                    throw new Error("Erro ao cadastrar produto. Reporte ao suporte imediatamente!")
+                    throw new Error("Erro ao cadastrar variação. Reporte ao suporte imediatamente!")
                 }
 
             }
 
-            toast.success("Produto cadastrado com sucesso");
+            toast.success("Variação cadastrada com sucesso");
             setOpen(false);
 
         } catch (error) {
@@ -86,47 +110,68 @@ export function CadProductVariant() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <div className="flex items-center gap-2 py-2 pl-2 text-sm text-slate-400 hover:text-white hover:bg-slate-900/50 rounded-r-md transition-colors cursor-pointer">
+                <Button className="cursor-pointer">
                     <LuPlus className="h-4 w-4" />
-                    Cadastrar Produto
-                </div>
+                    Cadastrar variação
+                </Button>
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Cadastrar novo produto</DialogTitle>
+                    <DialogTitle>Cadastrar nova variação</DialogTitle>
                     <DialogDescription>
-                        Preencha os dados do novo produto e clique em cadastrar.
+                        Preencha os dados da variação do produto e clique em cadastrar
                     </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={cadProductVariant} className="grid gap-4">
                     <div className="grid gap-3">
-                        <Label htmlFor="name-1">Nome</Label>
-                        <Input id="name-1" name="name" placeholder="Ex: Anél Prata 925" />
+                        <Label htmlFor="size-1">Tamanho</Label>
+                        <Input id="size-1" name="size" placeholder="Ex: 40cm, P, 18..." />
                     </div>
 
 
                     <div className="grid gap-3">
-                        <Label htmlFor="material-1">Material</Label>
-                        <Input id="material-1" name="material" placeholder="Ex: Ouro" />
+                        <Label htmlFor="sku-1">Código SKU</Label>
+                        <Input id="sku-1" name="sku" placeholder="Ex: AN98" />
                     </div>
 
 
                     <div className="grid gap-3">
-                        <Label htmlFor="description-1">Descrição</Label>
-                        <Input id="description-1" name="description" placeholder="Ex: Ideal para..." />
-                    </div>
-
-
-                    <div className="grid gap-3">
-                        <Label htmlFor="featured">Colocar em destaque?</Label>
-                        <Switch
-                            className="cursor-pointer"
-                            checked={featured}
-                            onCheckedChange={setFeatured}
+                        <Label htmlFor="price-1">Preço</Label>
+                        <Input
+                            type="number"
+                            id="price-1"
+                            name="price"
+                            step="0.01"
+                            min="0"
+                            placeholder="Ex: 28.90"
                         />
                     </div>
+
+                    <div className="grid gap-3">
+                        <Label htmlFor="stockQuantity-1">Quantidade Estoque</Label>
+                        <Input
+                            type="number"
+                            id="stockQuantity-1"
+                            name="stockQuantity"
+                            min="1"
+                            placeholder="Ex: 100"
+                        />
+                    </div>
+
+                    <div className="grid gap-3">
+                        <Label htmlFor="weightGrams-1">Peso (em gramas)</Label>
+                        <Input
+                            type="number"
+                            id="weightGrams-1"
+                            name="weightGrams"
+                            step="0.01"
+                            min="0"
+                            placeholder="Ex: 125.25"
+                        />
+                    </div>
+
 
                     <DialogFooter>
                         <DialogClose asChild>

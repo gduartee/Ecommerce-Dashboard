@@ -113,6 +113,7 @@ export function ProductTable() {
                             <div className="flex gap-2 mt-auto">
                                 <ViewProductVariants
                                     variants={product.productVariants}
+                                    productId={product.productId}
                                 />
 
                                 <ViewProductDetails
