@@ -12,6 +12,7 @@ import { Input } from "../ui/input"
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { useRefreshStore } from "@/store/useRefreshStore";
+import { getCookieClient } from "@/utils/cookie";
 
 export function FormCadCategory() {
     const [open, setOpen] = useState(false);
@@ -19,6 +20,8 @@ export function FormCadCategory() {
     const [error, setError] = useState("");
 
     const { bumpCategories } = useRefreshStore();
+
+    const token = getCookieClient("auth-token-emp");
 
     async function cadCategory(event: React.FormEvent<HTMLFormElement>) {
         try {
@@ -31,7 +34,8 @@ export function FormCadCategory() {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     name

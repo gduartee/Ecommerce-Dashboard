@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { ViewProductDetails } from "../view/ViewProductDetails";
 import { ViewProductVariants } from "../view/ViewProductVariants";
 import { FaTrash } from "react-icons/fa";
+import { getCookieClient } from "@/utils/cookie";
 
 interface ProductVariant {
     productVariantId: number;
@@ -42,6 +43,8 @@ export function ProductTable() {
     const [totalPages, setTotalPages] = useState(1);
     const [products, setProducts] = useState<Product[] | null>(null);
 
+    const token = getCookieClient("auth-token-emp");
+
     async function fetchProducts() {
         try {
             setLoading(true);
@@ -49,7 +52,8 @@ export function ProductTable() {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?name=${nameBuscar}&page=${page - 1}`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             });
 

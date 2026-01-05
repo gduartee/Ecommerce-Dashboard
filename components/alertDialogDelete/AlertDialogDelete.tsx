@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { useRefreshStore } from "@/store/useRefreshStore";
+import { getCookieClient } from "@/utils/cookie";
 import { useState } from "react";
-import { FaTrash, FaTrashAlt } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { toast } from "sonner";
 
 type AlertDialogDeleteProps = {
@@ -27,6 +28,8 @@ export function AlertDialogDelete({ itemName, itemId }: AlertDialogDeleteProps) 
     const [loading, setLoading] = useState(false);
 
     const { bumpCategories } = useRefreshStore();
+
+    const token = getCookieClient("auth-token-emp");
 
     var rota = "";
     var flexaoDeGenero = "";
@@ -54,11 +57,12 @@ export function AlertDialogDelete({ itemName, itemId }: AlertDialogDeleteProps) 
             setLoading(true);
 
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/${rota}/${itemId}`,
-                {
-                    method: "DELETE"
+                `${process.env.NEXT_PUBLIC_API_URL}/${rota}/${itemId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
-            );
+            });
 
             const text = await response.text();
 

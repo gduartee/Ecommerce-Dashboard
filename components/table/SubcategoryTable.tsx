@@ -10,6 +10,7 @@ import { AlertDialogDelete } from "../alertDialogDelete/AlertDialogDelete";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { EditSubcategory } from "../edit/EditSubcategory";
 import { useRefreshStore } from "@/store/useRefreshStore";
+import { getCookieClient } from "@/utils/cookie";
 
 type Props = {
     categoryId: number;
@@ -29,6 +30,8 @@ export function SubcategoryTable({ categoryId }: Props) {
     const { selected, toggle } = useSelectionStore();
     const { subcategoriesVersion } = useRefreshStore();
 
+    const token = getCookieClient("auth-token-emp");
+
     async function fetchSubcategories() {
         try {
             setLoading(true);
@@ -36,7 +39,8 @@ export function SubcategoryTable({ categoryId }: Props) {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subcategories/categoryId/${categoryId}`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             });
 
@@ -44,7 +48,7 @@ export function SubcategoryTable({ categoryId }: Props) {
                 throw new Error("Erro ao carregar subcategorias. Reporte ao suporte imediatamente!");
 
             const data = await response.json();
-            console.log(data);
+            
             setSubcategories(data.data);
         } catch (error) {
             toast.error(`${error}`)

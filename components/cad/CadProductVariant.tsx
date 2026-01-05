@@ -17,12 +17,15 @@ import { Switch } from "../ui/switch";
 import { LuPlus } from "react-icons/lu";
 import { useState } from "react";
 import { toast } from "sonner";
+import { getCookieClient } from "@/utils/cookie";
 
 export function CadProductVariant() {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [error, setError] = useState("");
     const [featured, setFeatured] = useState(false);
+
+    const token = getCookieClient("auth-token-emp");
 
     async function cadProductVariant(event: React.FormEvent<HTMLFormElement>) {
         try {
@@ -46,7 +49,8 @@ export function CadProductVariant() {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     name,

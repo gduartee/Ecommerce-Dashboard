@@ -11,6 +11,7 @@ import { Input } from "../ui/input";
 import { AlertDialogDelete } from "../alertDialogDelete/AlertDialogDelete";
 import { EditCategory } from "../edit/EditCategory";
 import { SubcategoryTable } from "./SubcategoryTable";
+import { getCookieClient } from "@/utils/cookie";
 
 
 type Category = {
@@ -30,8 +31,9 @@ export function CategoryTable() {
     const [categories, setCategories] = useState<Category[] | null>(null);
 
     const { selected, toggle } = useSelectionStore();
-
     const { categoriesVersion } = useRefreshStore();
+
+    const token = getCookieClient("auth-token-emp");
 
 
     async function fetchCategories() {
@@ -41,6 +43,7 @@ export function CategoryTable() {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             })
 
@@ -58,10 +61,10 @@ export function CategoryTable() {
         }
     }
 
+
     useEffect(() => {
         fetchCategories();
     }, [categoriesVersion, page, nameBuscar]);
-
 
     return (
         <div className="flex flex-col gap-4">

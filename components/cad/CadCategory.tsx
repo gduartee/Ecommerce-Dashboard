@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useRefreshStore } from "@/store/useRefreshStore";
 import { AlertDialogDelete } from "../alertDialogDelete/AlertDialogDelete";
+import { getCookieClient } from "@/utils/cookie";
 
 type Subcategory = {
     subCategoryId: number;
@@ -39,12 +40,15 @@ export function CadCategory() {
 
     const { categoriesVersion } = useRefreshStore();
 
+    const token = getCookieClient("auth-token-emp");
+
     async function fetchCategories() {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             })
 

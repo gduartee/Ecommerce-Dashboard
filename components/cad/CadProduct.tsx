@@ -21,6 +21,7 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { LuPlus } from "react-icons/lu";
 import { toast } from "sonner";
 import { useRefreshStore } from "@/store/useRefreshStore";
+import { getCookieClient } from "@/utils/cookie";
 
 
 type Category = {
@@ -53,6 +54,8 @@ export function CadProduto() {
 
     const { bumpProducts } = useRefreshStore();
 
+    const token = getCookieClient("auth-token-emp");
+
 
     async function fetchCategories() {
         try {
@@ -61,7 +64,8 @@ export function CadProduto() {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             });
 
@@ -104,7 +108,8 @@ export function CadProduto() {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     subcategoryId: selectedSubCategoryId,

@@ -12,6 +12,7 @@ import { Button } from "../ui/button"
 import { useState } from "react";
 import { toast } from "sonner";
 import { useRefreshStore } from "@/store/useRefreshStore";
+import { getCookieClient } from "@/utils/cookie";
 
 type Props = {
     categoryId: number
@@ -23,6 +24,8 @@ export function FormCadSubCategory({ categoryId }: Props) {
     const [error, setError] = useState("");
 
     const { bumpCategories } = useRefreshStore();
+
+    const token = getCookieClient("auth-token-emp");
 
     async function cadSubCategory(event: React.FormEvent<HTMLFormElement>) {
         try {
@@ -40,7 +43,8 @@ export function FormCadSubCategory({ categoryId }: Props) {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subcategories`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     name,
