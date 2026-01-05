@@ -1,8 +1,7 @@
 "use client";
 
-import { LuMenu, LuPackage, LuPlus, LuList } from "react-icons/lu";
+import { LuMenu, LuPackage, LuList } from "react-icons/lu";
 import { MdOutlineCategory } from "react-icons/md";
-
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -24,9 +23,27 @@ import { LogOut } from "lucide-react";
 import { CadCategory } from "../cad/CadCategory";
 import { useSectionStore } from "@/store/useSectionStore";
 import { CadProduto } from "../cad/CadProduct";
+import Cookies from "js-cookie";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function Sidebar() {
   const { setActiveSection } = useSectionStore();
+
+  const router = useRouter();
+
+  function handleLogout() {
+    Cookies.remove("auth-token-emp");
+
+    toast.success("Você saiu do sistema");
+
+    // para que o botão "Voltar" do navegador não mostre a página antiga (cacheada)
+    router.replace("/login");
+
+    // garante que qualquer Server Component na tela limpe o cache
+    router.refresh();
+
+  }
 
   return (
     <Sheet>
@@ -123,7 +140,11 @@ export function Sidebar() {
             />
             <span className="text-sm">Bem-vindo(a) user</span>
 
-            <LogOut size={20} className="ml-auto text-red-500 cursor-pointer" />
+            <LogOut
+              size={20}
+              className="ml-auto text-red-500 cursor-pointer"
+              onClick={handleLogout}
+            />
           </div>
         </SheetFooter>
       </SheetContent>

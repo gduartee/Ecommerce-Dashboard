@@ -1,12 +1,15 @@
 import { Cards } from "@/components/cards/Cards";
 import { PageContent } from "@/components/pageContent/PageContent";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
-async function getTotalClientes() {
+async function getTotalClientes(token: string) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       },
       cache: "no-store"
     })
@@ -24,7 +27,17 @@ async function getTotalClientes() {
 }
 
 export default async function Home() {
-  const totalClientes = await getTotalClientes();
+  // Acessa os cookies do servidor
+  const cookieStore = await cookies();
+
+  // Tenta pegar o valor
+  const token = cookieStore.get("auth-token-emp")?.value;
+
+  if (!token)
+    redirect("/login");
+
+  const totalClientes = await getTotalClientes(token);
+
   return (
     <main className="p-4 lg:p-10">
       <Cards totalClientes={totalClientes} />
