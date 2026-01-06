@@ -10,6 +10,7 @@ import { ViewProductDetails } from "../view/ViewProductDetails";
 import { ViewProductVariants } from "../view/ViewProductVariants";
 import { FaTrash } from "react-icons/fa";
 import { getCookieClient } from "@/utils/cookie";
+import { useRefreshStore } from "@/store/useRefreshStore";
 
 interface ProductVariant {
     productVariantId: number;
@@ -45,6 +46,8 @@ export function ProductTable() {
 
     const token = getCookieClient("auth-token-emp");
 
+    const { imagesVersion } = useRefreshStore();
+
     async function fetchProducts() {
         try {
             setLoading(true);
@@ -73,7 +76,7 @@ export function ProductTable() {
 
     useEffect(() => {
         fetchProducts();
-    }, [nameBuscar]);
+    }, [nameBuscar, imagesVersion]);
 
     return (
         <div className="flex flex-col gap-4">
