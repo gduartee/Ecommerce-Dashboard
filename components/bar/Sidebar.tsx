@@ -26,12 +26,17 @@ import { CadProduto } from "../cad/CadProduct";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { getUserName } from "@/utils/tokenData";
+import { getId, getUserName } from "@/utils/tokenData";
+import avatarImagem from "../../public/assets/images/do-utilizador.png";
+import { useEffect, useState } from "react";
 
 export function Sidebar() {
+  const [userImg, setUserImg] = useState<string | null>(null);
+
   const { setActiveSection } = useSectionStore();
 
   const router = useRouter();
+  const employeeId = getId();
 
   function handleLogout() {
     Cookies.remove("auth-token-emp");
@@ -45,6 +50,30 @@ export function Sidebar() {
     router.refresh();
 
   }
+
+  async function fetchUserImg() {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/images/employee/${employeeId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok)
+        throw new Error("Erro ao buscar imagem do funcionário. Reporte ao suporte imediatamente!");
+
+      const data = await response.json();
+
+      setUserImg(data.data[0].url);
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  }
+
+  useEffect(() => {
+    fetchUserImg();
+  }, []);
 
   return (
     <Sheet>
@@ -133,11 +162,12 @@ export function Sidebar() {
         <SheetFooter className="bg-slate-800 p-6">
           <div className="flex items-center gap-2">
             <Image
-              src="/assets/images/do-utilizador.png"
+              src={userImg || avatarImagem}
               width={40}
               height={40}
               alt="user"
               draggable={false}
+              className="rounded-full"
             />
             <span className="text-sm">Bem-vindo(a) {getUserName()}</span>
 

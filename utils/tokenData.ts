@@ -1,6 +1,5 @@
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
-import { decode } from "punycode";
 
 interface TokenPayload {
     id: number;
@@ -45,5 +44,22 @@ export function isManager(): boolean {
     } catch (error) {
         console.error(error);
         return false;
+    }
+}
+
+export function getId(): number | null {
+    const token = getToken();
+
+    if (!token)
+        return null;
+
+    try {
+        const decoded = jwtDecode<TokenPayload>(token);
+
+        return decoded.id;
+
+    } catch (error) {
+        console.error(error);
+        return null;
     }
 }
