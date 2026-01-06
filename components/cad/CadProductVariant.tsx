@@ -25,12 +25,12 @@ interface Props {
 export function CadProductVariant({ productId }: Props) {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
-    const [error, setError] = useState("");;
 
     const token = getCookieClient("auth-token-emp");
 
     async function cadProductVariant(event: React.FormEvent<HTMLFormElement>) {
         try {
+            let msgError;
             event.preventDefault();
 
             const formData = new FormData(event.currentTarget);
@@ -87,14 +87,13 @@ export function CadProductVariant({ productId }: Props) {
             const data = await response.json();
 
             if (!response.ok) {
-                if (data.errors.description) {
-                    setError(data.errors.description);
-                    throw new Error(error);
-                }
-                else {
-                    throw new Error("Erro ao cadastrar variação. Reporte ao suporte imediatamente!")
+                if (data.detail) {
+                    msgError = data.detail;
+                } else {
+                    msgError = "Erro ao cadastrar produto. Verifique os campos ou reporte ao suporte!";
                 }
 
+                throw new Error(msgError);
             }
 
             toast.success("Variação cadastrada com sucesso");

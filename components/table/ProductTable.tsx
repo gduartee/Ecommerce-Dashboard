@@ -46,7 +46,7 @@ export function ProductTable() {
 
     const token = getCookieClient("auth-token-emp");
 
-    const { imagesVersion } = useRefreshStore();
+    const { productsVersion } = useRefreshStore();
 
     async function fetchProducts() {
         try {
@@ -76,7 +76,7 @@ export function ProductTable() {
 
     useEffect(() => {
         fetchProducts();
-    }, [nameBuscar, imagesVersion]);
+    }, [nameBuscar, productsVersion]);
 
     return (
         <div className="flex flex-col gap-4">

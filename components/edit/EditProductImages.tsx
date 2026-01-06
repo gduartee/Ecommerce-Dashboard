@@ -40,7 +40,7 @@ export function EditProductImages({ productId }: Props) {
     const mainImage = images.find(img => img.isMain);
     const otherImages = images.filter(img => !img.isMain);
 
-    const { bumpImages, imagesVersion } = useRefreshStore();
+    const { bumpImages, imagesVersion, bumpProducts } = useRefreshStore();
 
     async function fetchProdImages() {
         try {
@@ -80,6 +80,10 @@ export function EditProductImages({ productId }: Props) {
                 throw new Error("Erro ao deletar imagem! Reporte ao suporte imediatamente.");
 
             bumpImages();
+
+            if (targetIndex === 0)
+                bumpProducts();
+
             toast.success("Imagem deletada com sucesso!");
         } catch (error) {
             toast.error(`${error}`);
@@ -120,6 +124,10 @@ export function EditProductImages({ productId }: Props) {
                 throw new Error("Erro ao subir imagem");
 
             bumpImages();
+            
+             if (targetIndex === 0)
+                bumpProducts();
+
             toast.success("Upload realizado com sucesso!");
         } catch (error) {
             toast.error(`${error}`);
