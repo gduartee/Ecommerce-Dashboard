@@ -26,6 +26,7 @@ import { CadProduto } from "../cad/CadProduct";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { getUserName } from "@/utils/tokenData";
 
 export function Sidebar() {
   const { setActiveSection } = useSectionStore();
@@ -138,7 +139,7 @@ export function Sidebar() {
               alt="user"
               draggable={false}
             />
-            <span className="text-sm">Bem-vindo(a) user</span>
+            <span className="text-sm">Bem-vindo(a) {getUserName()}</span>
 
             <LogOut
               size={20}
