@@ -11,6 +11,7 @@ import { ViewProductVariants } from "../view/ViewProductVariants";
 import { FaTrash } from "react-icons/fa";
 import { getCookieClient } from "@/utils/cookie";
 import { useRefreshStore } from "@/store/useRefreshStore";
+import { AlertDialogDeleteProduct } from "../alertDialogDelete/AlertDialogDeleteProduct";
 
 interface ProductVariant {
     productVariantId: number;
@@ -104,7 +105,7 @@ export function ProductTable() {
 
                             <div className="relative w-full h-80 shadow-2xl rounded-lg overflow-hidden">
                                 <Image
-                                    src={product?.images[0]?.url || imageIcon}
+                                    src={(product.images && product.images.length > 0) ? product.images[0].url : imageIcon}
                                     alt="Imagem do produto"
                                     className="object-cover"
                                     fill
@@ -115,7 +116,6 @@ export function ProductTable() {
 
                             <div className="flex gap-2 mt-auto">
                                 <ViewProductVariants
-                                    variants={product.productVariants}
                                     productId={product.productId}
                                 />
 
@@ -127,11 +127,7 @@ export function ProductTable() {
                                     featured={product.featured}
                                 />
 
-                                <Button
-                                    className="cursor-pointer" variant="destructive"
-                                >
-                                    <FaTrash />
-                                </Button>
+                                <AlertDialogDeleteProduct productId={product.productId} />
                             </div>
                         </div>
                     ))

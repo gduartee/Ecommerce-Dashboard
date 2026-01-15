@@ -4,6 +4,10 @@ import { formatBRL } from "@/utils/formatBRL";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { CadProductVariant } from "../cad/CadProductVariant";
+import { EditProductVariant } from "../edit/EditProductVariant";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useRefreshStore } from "@/store/useRefreshStore";
 
 interface ProductVariant {
     productVariantId: number;
@@ -14,14 +18,45 @@ interface ProductVariant {
     weightGrams: number;
 }
 
-interface ViewProductVariantsProps {
-    variants: ProductVariant[];
+interface Props {
     productId: number;
 }
 
-export function ViewProductVariants({ variants, productId }: ViewProductVariantsProps) {
+export function ViewProductVariants({ productId }: Props) {
+    const [variants, setVariants] = useState<ProductVariant[] | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    const { variantsVersion } = useRefreshStore();
+
+    async function fetchVariants() {
+        try {
+            setLoading(true);
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/variants/all/product/${productId}`, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok)
+                throw new Error("Erro ao buscar variações. Reporte ao suporte!");
+
+            const data = await response.json();
+
+            setVariants(data);
+        } catch (error) {
+            toast.error(`${error}`);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        if (open)
+            fetchVariants();
+    }, [open, variantsVersion])
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button className="flex-1 cursor-pointer">
                     Ver variações
@@ -62,14 +97,18 @@ export function ViewProductVariants({ variants, productId }: ViewProductVariants
                                         <td className="px-4 py-3 text-right font-bold text-green-600 whitespace-nowrap">
                                             {formatBRL(variant.price)}
                                         </td>
-                                        <td className="px-4 py-3">ações</td>
+                                        <td className="px-4 py-3">
+                                            <div className="flex gap-2">
+                                                <EditProductVariant productVariantId={variant.productVariantId} />
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     ) : (
                         <p className="text-center text-muted-foreground py-10">
-                            Nenhuma variação cadastrada para este produto.
+                            {loading ? "Carregando variações" : "Nenhuma variação cadastrada para este produto."}
                         </p>
                     )}
                 </div>

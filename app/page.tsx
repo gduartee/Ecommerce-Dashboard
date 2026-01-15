@@ -36,7 +36,7 @@ export default async function Home() {
   if (!token)
     redirect("/login");
 
-  const totalClientes = await getTotalClientes(token);
+  const totalClientes = await getTotalClientes(token) || 0;
 
   return (
     <main className="p-4 lg:p-10">

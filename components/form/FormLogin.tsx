@@ -23,46 +23,56 @@ export function FormLogin() {
     const router = useRouter();
 
     async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        setLoading(true);
+
         try {
-            e.preventDefault();
             const formData = new FormData(e.currentTarget);
-
-
             const email = String(formData.get("email")).trim();
             const password = String(formData.get("password")).trim();
 
             if (!email || !password) {
                 toast.warning("Preencha todos os campos!");
+                setLoading(false); // Importante parar o loading aqui
                 return;
             }
-
-            setLoading(true);
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/employee/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
+                body: JSON.stringify({ email, password })
             });
 
+            // Tenta pegar o texto da resposta
             const data = await response.text();
 
             if (!response.ok) {
-                toast.error(data);
-                return;
+                // Se não for OK (200-299), lança erro para o catch
+                throw new Error(data || "Credenciais inválidas");
             }
 
-            Cookies.set("auth-token-emp", data, { expires: 1 })
-            toast.success("Bem-vindo(a)!");
-            router.push("/");
+            // Se chegou aqui, o login foi sucesso (Status 200)
+            console.log("Token recebido:", data);
 
-        } catch (error) {
-            console.error(error);
-            toast.error("Erro de conexão. Reporte ao suporte imediatamente!");
+            // Configurando o cookie explicitamente para a raiz do domínio
+            Cookies.set("auth-token-emp", data, {
+                expires: 1,
+                path: '/',
+                sameSite: 'lax',
+                secure: process.env.NODE_ENV === 'production'
+            });
+
+            toast.success("Bem-vindo(a)!");
+
+            // Use window.location.href se o router.push não refletir o cookie imediatamente
+            router.push("/");
+            router.refresh();
+
+        } catch (error: any) {
+            console.error("Erro no login:", error);
+            toast.error(error.message || "Erro ao realizar login");
         } finally {
             setLoading(false);
         }
