@@ -15,11 +15,80 @@ async function getTotalClientes(token: string) {
     })
 
     if (!response.ok)
-      throw new Error("Erro ao buscar dados dos cards. Reporte ao suporte imediatamente!");
+      throw new Error("Erro ao buscar total de clientes. Reporte ao suporte imediatamente!");
 
     const data = await response.json();
 
     return data.totalElements;
+
+  } catch (error) {
+    console.error(`${error}`);
+  }
+}
+
+async function getTotalFaturado(token: string) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/revenue/total`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      cache: "no-store"
+    })
+
+    if (!response.ok)
+      throw new Error("Erro ao buscar total faturado. Reporte ao suporte imediatamente!");
+
+    const data = await response.json();
+
+    return data;
+
+  } catch (error) {
+    console.error(`${error}`);
+  }
+}
+
+async function getPendingDelivery(token: string) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/pending-delivery`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      cache: "no-store"
+    })
+
+    if (!response.ok)
+      throw new Error("Erro ao buscar envios pendentes. Reporte ao suporte imediatamente!");
+
+    const data = await response.json();
+
+    return data;
+
+  } catch (error) {
+    console.error(`${error}`);
+  }
+}
+
+async function getTotalSoldProducts(token: string) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/stats/products-sold-month`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      cache: "no-store"
+    })
+
+    if (!response.ok)
+      throw new Error("Erro ao buscar total de produtos vendidos. Reporte ao suporte imediatamente!");
+
+    const data = await response.json();
+
+    return data;
 
   } catch (error) {
     console.error(`${error}`);
@@ -36,11 +105,20 @@ export default async function Home() {
   if (!token)
     redirect("/login");
 
-  const totalClientes = await getTotalClientes(token) || 0;
+  const totalCustomers = await getTotalClientes(token) || 0;
+  const totalInvoiced = await getTotalFaturado(token) || 0;
+  const totalPendingDelivery = await getPendingDelivery(token) || 0;
+  const totalSoldProducts = await getTotalSoldProducts(token) || 0;
+
 
   return (
     <main className="p-4 lg:p-10">
-      <Cards totalClientes={totalClientes} />
+      <Cards 
+      totalCustomers={totalCustomers} 
+      totalInvoiced={totalInvoiced}
+      totalPendingDelivery={totalPendingDelivery}
+      totalSoldProducts={totalSoldProducts}
+      />
       <PageContent />
     </main>
   );

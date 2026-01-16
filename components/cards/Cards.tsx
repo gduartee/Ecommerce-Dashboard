@@ -5,12 +5,16 @@ import { BadgeDollarSignIcon, Users2 } from "lucide-react";
 import { BsBox2 } from "react-icons/bs";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
+import { formatBRL } from "@/utils/formatBRL";
 
 interface DashboardData {
-    totalClientes: number;
+    totalCustomers: number;
+    totalInvoiced: number;
+    totalPendingDelivery: number;
+    totalSoldProducts: number;
 }
 
-export function Cards({ totalClientes }: DashboardData) {
+export function Cards({ totalCustomers, totalInvoiced, totalPendingDelivery, totalSoldProducts }: DashboardData) {
     return (
         <section className="flex flex-col">
             {/* APENAS DESKTOP */}
@@ -30,7 +34,7 @@ export function Cards({ totalClientes }: DashboardData) {
                     </CardHeader>
 
                     <CardContent className="select-none">
-                        <p className="text-base sm:text-lg font-bold"> x</p>
+                        <p className="text-base sm:text-lg font-bold">{formatBRL(totalInvoiced)}</p>
                     </CardContent>
                 </Card>
 
@@ -49,7 +53,7 @@ export function Cards({ totalClientes }: DashboardData) {
                     </CardHeader>
 
                     <CardContent className="select-none">
-                        <p className="text-base sm:text-lg font-bold ">{totalClientes}</p>
+                        <p className="text-base sm:text-lg font-bold ">{totalCustomers}</p>
                     </CardContent>
                 </Card>
 
@@ -68,7 +72,7 @@ export function Cards({ totalClientes }: DashboardData) {
                     </CardHeader>
 
                     <CardContent className="select-none">
-                        <p className="text-base sm:text-lg font-bold ">x</p>
+                        <p className="text-base sm:text-lg font-bold ">{totalSoldProducts}</p>
                     </CardContent>
                 </Card>
 
@@ -87,7 +91,7 @@ export function Cards({ totalClientes }: DashboardData) {
                     </CardHeader>
 
                     <CardContent className="select-none">
-                        <p className="text-base sm:text-lg font-bold ">x</p>
+                        <p className="text-base sm:text-lg font-bold ">{totalPendingDelivery}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -113,7 +117,7 @@ export function Cards({ totalClientes }: DashboardData) {
                                 </CardHeader>
 
                                 <CardContent className="select-none">
-                                    <p className="text-base sm:text-lg font-bold"> x</p>
+                                    <p className="text-base sm:text-lg font-bold">{formatBRL(totalInvoiced)}</p>
                                 </CardContent>
                             </Card>
                         </CarouselItem>
@@ -134,7 +138,7 @@ export function Cards({ totalClientes }: DashboardData) {
                                 </CardHeader>
 
                                 <CardContent className="select-none">
-                                    <p className="text-base sm:text-lg font-bold ">X</p>
+                                    <p className="text-base sm:text-lg font-bold ">{totalCustomers}</p>
                                 </CardContent>
                             </Card>
                         </CarouselItem>
@@ -155,7 +159,7 @@ export function Cards({ totalClientes }: DashboardData) {
                                 </CardHeader>
 
                                 <CardContent className="select-none">
-                                    <p className="text-base sm:text-lg font-bold ">x</p>
+                                    <p className="text-base sm:text-lg font-bold ">{totalSoldProducts}</p>
                                 </CardContent>
                             </Card>
                         </CarouselItem>
@@ -176,7 +180,7 @@ export function Cards({ totalClientes }: DashboardData) {
                                 </CardHeader>
 
                                 <CardContent className="select-none">
-                                    <p className="text-base sm:text-lg font-bold ">x</p>
+                                    <p className="text-base sm:text-lg font-bold ">{totalPendingDelivery}</p>
                                 </CardContent>
                             </Card>
                         </CarouselItem>

@@ -1,6 +1,6 @@
 "use client";
 
-import { LuMenu, LuPackage, LuList } from "react-icons/lu";
+import { LuMenu, LuPackage, LuList, LuUser } from "react-icons/lu";
 import { MdOutlineCategory } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import {
@@ -97,6 +97,7 @@ export function Sidebar() {
         </SheetHeader>
 
         <nav className="flex flex-col gap-4 overflow-y-auto">
+          {/** ======================== CATEGORIAS ======================== */}
           <Accordion type="single" collapsible className="w-full border-none">
 
             <AccordionItem value="produtos" className="border-b-slate-800">
@@ -128,6 +129,7 @@ export function Sidebar() {
             </AccordionItem>
           </Accordion>
 
+          {/** ======================== PRODUTOS ======================== */}
           <Accordion type="single" collapsible className="w-full border-none">
 
             <AccordionItem value="produtos" className="border-b-slate-800">
@@ -155,6 +157,40 @@ export function Sidebar() {
                     </div>
                   </SheetClose>
                 </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          {/** ======================== CLIENTES ======================== */}
+           <Accordion type="single" collapsible className="w-full border-none">
+
+            <AccordionItem value="produtos" className="border-b-slate-800">
+              <AccordionTrigger className="py-2 px-2 rounded-md hover:bg-slate-900 hover:no-underline data-[state=open]:bg-slate-900 text-slate-200 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <LuUser className="h-5 w-5 text-slate-400" />
+                  <span className="font-medium">Clientes</span>
+                </div>
+              </AccordionTrigger>
+
+              <AccordionContent className="pb-0 bg-slate-950">
+
+
+                <div className="flex flex-col space-y-1 pl-9 mt-1 border-l border-slate-800 ml-4">
+
+                  <SheetClose asChild>
+                    <div
+                      className="flex items-center gap-2 py-2 pl-2 text-sm text-slate-400 hover:text-white hover:bg-slate-900/50 rounded-r-md transition-colors cursor-pointer"
+                      onClick={() => setActiveSection("customerSection")}
+                    >
+                      <LuList className="h-4 w-4" />
+                      Ver Clientes
+                    </div>
+                  </SheetClose>
+
+
+                </div>
+
+                
               </AccordionContent>
             </AccordionItem>
           </Accordion>

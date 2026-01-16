@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 // 1. Definições de Tipo 
-type Scope = "category" | "subcategory" | "product";
+type Scope = "category" | "subcategory" | "product" | "customer";
 type ID = string | number; // Aceita ambos sem precisar converter forçadamente
 
 interface State {
@@ -19,6 +19,7 @@ const INITIAL_SELECTION: Record<Scope, ID | null> = {
   category: null,
   subcategory: null,
   product: null,
+  customer: null
 };
 
 export const useSelectionStore = create<State & Actions>((set) => ({
