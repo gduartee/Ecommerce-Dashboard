@@ -11,11 +11,13 @@ import { FaTrash } from "react-icons/fa";
 import { ViewCustomerAddresses } from "../view/ViewCustomerAddresses";
 import { useRefreshStore } from "@/store/useRefreshStore";
 import { AlertDialogDeleteCustomer } from "../alertDialogDelete/AlertDialogDeleteCustomer";
+import { ViewUserOrders } from "../view/ViewUserOrders";
 
 
 type Customer = {
     userId: string;
     name: string;
+    email: string;
     phoneNumber: string;
     cpf: string;
     addresses: {
@@ -91,9 +93,11 @@ export function CustomerTable() {
                         <tr>
                             <th className="px-2 py-1"> </th>
                             <th className="px-2 py-1">Nome</th>
+                            <th className="px-2 py-1">E-mail</th>
                             <th className="px-2 py-1">Telefone</th>
                             <th className="px-2 py-1">CPF</th>
                             <th className="px-2 py-1">Ver Endereços</th>
+                            <th className="px-2 py-1">Ver Pedidos</th>
                             <th className="px-2 py-1">Ações</th>
                         </tr>
                     </thead>
@@ -109,6 +113,7 @@ export function CustomerTable() {
                                         />
                                     </td>
                                     <td className="px-2 py-1">{customer.name}</td>
+                                    <td className="px-2 py-1">{customer.email}</td>
                                     <td className="px-2 py-1">
                                         {customer.phoneNumber}
                                     </td>
@@ -117,6 +122,9 @@ export function CustomerTable() {
                                     </td>
                                     <td className="px-2 py-1 ml-auto">
                                         <ViewCustomerAddresses addresses={customer.addresses} />
+                                    </td>
+                                    <td className="px-2 py-1 ml-auto">
+                                       <ViewUserOrders userId={customer.userId} userName={customer.name}/>
                                     </td>
                                     <td className="px-2 py-1">
                                         {selected.customer !== customer.userId ? (

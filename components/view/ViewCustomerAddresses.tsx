@@ -27,7 +27,7 @@ export function ViewCustomerAddresses({ addresses }: ViewCustomerAddressesProps)
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="flex gap-2">
+        <Button variant="outline" size="sm" className="flex gap-2 cursor-pointer">
           <MapPin className="w-4 h-4" />
           Ver Endereços
         </Button>
