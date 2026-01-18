@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type Section = 'home' | 'categorySection' | 'productSection' | 'customerSection';
+type Section = 'home' | 'categorySection' | 'productSection' | 'customerSection' | 'orderSection';
 
 type SectionStore = {
     activeSection: Section;

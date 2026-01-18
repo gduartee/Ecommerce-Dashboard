@@ -29,6 +29,7 @@ import { useRouter } from "next/navigation";
 import { getId, getUserName } from "@/utils/tokenData";
 import avatarImagem from "../../public/assets/images/do-utilizador.png";
 import { useEffect, useState } from "react";
+import { TbTruckDelivery } from "react-icons/tb";
 
 export function Sidebar() {
   const [userImg, setUserImg] = useState<string | null>(null);
@@ -184,6 +185,40 @@ export function Sidebar() {
                     >
                       <LuList className="h-4 w-4" />
                       Ver Clientes
+                    </div>
+                  </SheetClose>
+
+
+                </div>
+
+                
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+           {/** ======================== PEDIDOS ======================== */}
+           <Accordion type="single" collapsible className="w-full border-none">
+
+            <AccordionItem value="produtos" className="border-b-slate-800">
+              <AccordionTrigger className="py-2 px-2 rounded-md hover:bg-slate-900 hover:no-underline data-[state=open]:bg-slate-900 text-slate-200 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <TbTruckDelivery className="h-5 w-5 text-slate-400" />
+                  <span className="font-medium">Pedidos</span>
+                </div>
+              </AccordionTrigger>
+
+              <AccordionContent className="pb-0 bg-slate-950">
+
+
+                <div className="flex flex-col space-y-1 pl-9 mt-1 border-l border-slate-800 ml-4">
+
+                  <SheetClose asChild>
+                    <div
+                      className="flex items-center gap-2 py-2 pl-2 text-sm text-slate-400 hover:text-white hover:bg-slate-900/50 rounded-r-md transition-colors cursor-pointer"
+                      onClick={() => setActiveSection("orderSection")}
+                    >
+                      <LuList className="h-4 w-4" />
+                      Ver Pedidos
                     </div>
                   </SheetClose>
 
